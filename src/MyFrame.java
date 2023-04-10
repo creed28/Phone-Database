@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MyFrame extends JFrame {
 
@@ -20,9 +21,8 @@ public class MyFrame extends JFrame {
     // TODO --COMBINE BRAND AND MODEL IN ONE ROW
     // TODO --MAKE MORE SEARCH OPTIONS
     // TODO --TOTAL QUANTITY IN INQUIRY 2
-    // TODO --NAV ONCLICK CLEAR TEXT-FIELDS
     // TODO --NAV + BUTTON ONCLICK CLEAR INQUIRY TABLES
-    // TODO --ONCLICK FILL INQUIRY TEXT-FIELDS
+    // TODO --IMPROVE CODE + SQL
 
     Connection conn = null;
     PreparedStatement state = null;
@@ -174,6 +174,8 @@ public class MyFrame extends JFrame {
         this.setTitle("Phone4You");
         ImageIcon img = new ImageIcon("img/phone icon.png");
         this.setIconImage(img.getImage());
+
+        nav.addChangeListener(e -> clearForms());
         this.add(nav);
 
         // adding to panels
@@ -315,6 +317,7 @@ public class MyFrame extends JFrame {
         inquiry1Panel.add(inquiry1MidPanel);
 
         // inquiry1 down panel
+        inquiry1Table.addMouseListener(new Inquiry1MouseAction());
         inquiry1Scroll.setPreferredSize(new Dimension(550,150));
         inquiry1DownPanel.add(inquiry1Scroll);
         inquiry1Panel.add(inquiry1DownPanel);
@@ -338,6 +341,7 @@ public class MyFrame extends JFrame {
         inquiry2Panel.add(inquiry2MidPanel);
 
         // inquiry2 down panel
+        inquiry2Table.addMouseListener(new Inquiry2MouseAction());
         inquiry2Scroll.setPreferredSize(new Dimension(800,150));
         inquiry2DownPanel.add(inquiry2Scroll);
         inquiry2Panel.add(inquiry2DownPanel);
@@ -447,30 +451,18 @@ public class MyFrame extends JFrame {
         }
     }
 
-    public void customerClearForm() {
+    public void clearForms() {
         firstNameTF.setText("");
         lastNameTF.setText("");
         phoneTF.setText("");
         addressTF.setText("");
-    }
-
-    public void productClearForm() {
         productModelTF.setText("");
         productPriceTF.setText("");
         productStorageTF.setText("");
         productColorTF.setText("");
-    }
-
-    public void purchasesClearForm() {
         quantityTF.setText("");
         purchaseDateTF.setText("");
-    }
-
-    public void inquiry1ClearForm() {
         inquiry1TF.setText("");
-    }
-
-    public void inquiry2ClearForm() {
         inquiry2AddressTF.setText("");
         inquiry2ColorTF.setText("");
     }
@@ -492,7 +484,7 @@ public class MyFrame extends JFrame {
                 state.execute();
                 refreshCustomersTable();
                 refreshCustomersCombo();
-                customerClearForm();
+                clearForms();
             } catch (SQLException e1) {
                 JOptionPane.showMessageDialog(frame, "Проверете данните!");
             } catch (Exception e1) {
@@ -510,7 +502,7 @@ public class MyFrame extends JFrame {
             String sql = "insert into products(brand, model, price, storage, color) values(?,?,?,?,?)";
             try {
                 state = conn.prepareStatement(sql);
-                state.setString(1, brandsCombo.getSelectedItem().toString());
+                state.setString(1, Objects.requireNonNull(brandsCombo.getSelectedItem()).toString());
                 state.setString(2, productModelTF.getText());
                 state.setFloat(3, Float.parseFloat(productPriceTF.getText()));
                 state.setInt(4, Integer.parseInt(productStorageTF.getText()));
@@ -519,7 +511,7 @@ public class MyFrame extends JFrame {
                 state.execute();
                 refreshProductsTable();
                 refreshProductsCombo();
-                productClearForm();
+                clearForms();
 
             } catch (SQLException e1) {
                 JOptionPane.showMessageDialog(frame, "Проверете данните!");
@@ -538,8 +530,8 @@ public class MyFrame extends JFrame {
             String sql ="insert into purchases(customer_name, product_name, quantity, purchase_date) values(?,?,?,?)";
             try {
                 state = conn.prepareStatement(sql);
-                state.setString(1, customerCombo.getSelectedItem().toString());
-                state.setString(2, productCombo.getSelectedItem().toString());
+                state.setString(1, Objects.requireNonNull(customerCombo.getSelectedItem()).toString());
+                state.setString(2, Objects.requireNonNull(productCombo.getSelectedItem()).toString());
                 state.setInt(3, Integer.parseInt(quantityTF.getText()));
                 state.setString(4, purchaseDateTF.getText());
 
@@ -547,7 +539,7 @@ public class MyFrame extends JFrame {
                 refreshPurchasesTable();
                 checkCustomerPurchaseTable();
                 checkProductPurchaseTable();
-                purchasesClearForm();
+                clearForms();
 
             } catch (SQLException e1) {
                 JOptionPane.showMessageDialog(frame, "Проверете данните!");
@@ -588,7 +580,9 @@ public class MyFrame extends JFrame {
         public void mouseExited(MouseEvent e) {
 
         }
+
     }
+
 
     class ProductsMouseAction implements MouseListener {
 
@@ -665,6 +659,65 @@ public class MyFrame extends JFrame {
         }
     }
 
+    class Inquiry1MouseAction implements MouseListener {
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            int row = inquiry1Table.getSelectedRow();
+            inquiry1TF.setText(inquiry1Table.getValueAt(row, 4).toString());
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+
+        }
+    }
+
+    class Inquiry2MouseAction implements MouseListener {
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            int row = inquiry2Table.getSelectedRow();
+            inquiry2AddressTF.setText(inquiry2Table.getValueAt(row, 2).toString());
+            inquiry2ColorTF.setText(inquiry2Table.getValueAt(row, 4).toString());
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+
+        }
+    }
+
     class CustomersEditAction implements ActionListener {
         public void actionPerformed (ActionEvent arg0) {
             if(id > 0) {
@@ -681,7 +734,7 @@ public class MyFrame extends JFrame {
                     id = -1;
                     refreshCustomersTable();
                     refreshCustomersCombo();
-                    customerClearForm();
+                    clearForms();
 
                 } catch (SQLException e1) {
                     JOptionPane.showMessageDialog(frame, "Проверете данните!");
@@ -700,7 +753,7 @@ public class MyFrame extends JFrame {
 
                 try {
                     state = conn.prepareStatement(sql);
-                    state.setString(1, brandsCombo.getSelectedItem().toString());
+                    state.setString(1, Objects.requireNonNull(brandsCombo.getSelectedItem()).toString());
                     state.setString(2, productModelTF.getText());
                     state.setFloat(3, Float.parseFloat(productPriceTF.getText()));
                     state.setInt(4, Integer.parseInt(productStorageTF.getText()));
@@ -710,7 +763,7 @@ public class MyFrame extends JFrame {
                     id = -1;
                     refreshProductsTable();
                     refreshProductsCombo();
-                    productClearForm();
+                    clearForms();
 
                 } catch (SQLException e1) {
                     JOptionPane.showMessageDialog(frame, "Проверете данните!");
@@ -729,8 +782,8 @@ public class MyFrame extends JFrame {
 
                 try {
                     state = conn.prepareStatement(sql);
-                    state.setString(1, customerCombo.getSelectedItem().toString());
-                    state.setString(2, productCombo.getSelectedItem().toString());
+                    state.setString(1, Objects.requireNonNull(customerCombo.getSelectedItem()).toString());
+                    state.setString(2, Objects.requireNonNull(productCombo.getSelectedItem()).toString());
                     state.setInt(3, Integer.parseInt(quantityTF.getText()));
                     state.setString(4, (purchaseDateTF.getText()));
                     state.setInt(5, id);
@@ -739,7 +792,7 @@ public class MyFrame extends JFrame {
                     refreshPurchasesTable();
                     checkCustomerPurchaseTable();
                     checkProductPurchaseTable();
-                    purchasesClearForm();
+                    clearForms();
                 } catch (SQLException e1) {
                     JOptionPane.showMessageDialog(frame, "Проверете данните!");
                 } catch (Exception e1) {
@@ -786,7 +839,7 @@ public class MyFrame extends JFrame {
                         id = -1;
                         refreshCustomersTable();
                         refreshCustomersCombo();
-                        customerClearForm();
+                        clearForms();
                     } catch (SQLException e1) {
                         e1.printStackTrace();
                     }
@@ -835,7 +888,7 @@ public class MyFrame extends JFrame {
                         id = -1;
                         refreshProductsTable();
                         refreshProductsCombo();
-                        productClearForm();
+                        clearForms();
                     } catch (SQLException e1) {
                         e1.printStackTrace();
                     }
@@ -862,7 +915,7 @@ public class MyFrame extends JFrame {
                 refreshPurchasesTable();
                 checkCustomerPurchaseTable();
                 checkProductPurchaseTable();
-                purchasesClearForm();
+                clearForms();
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
@@ -882,6 +935,7 @@ public class MyFrame extends JFrame {
                 state.setInt(1, Integer.parseInt(phoneTF.getText()));
                 result = state.executeQuery();
                 customersTable.setModel(new MyModel(result));
+                clearForms();
             } catch (SQLException e1) {
                 JOptionPane.showMessageDialog(frame, "Проверете данните!");
             } catch (Exception e1) {
@@ -902,6 +956,7 @@ public class MyFrame extends JFrame {
                 state.setString(1, productStorageTF.getText());
                 result = state.executeQuery();
                 productsTable.setModel(new MyModel(result));
+                clearForms();
             } catch (SQLException e1) {
                 JOptionPane.showMessageDialog(frame, "Проверете данните!");
             } catch (Exception e1) {
@@ -922,6 +977,7 @@ public class MyFrame extends JFrame {
                 state.setString(1, quantityTF.getText());
                 result = state.executeQuery();
                 purchaseTable.setModel(new MyModel(result));
+                clearForms();
             } catch (SQLException e1) {
                 JOptionPane.showMessageDialog(frame, "Проверете данните!");
             } catch (Exception e1) {
@@ -942,7 +998,7 @@ public class MyFrame extends JFrame {
                 state.setString(1, inquiry1TF.getText());
                 result = state.executeQuery();
                 inquiry1Table.setModel(new MyModel(result));
-                inquiry1ClearForm();
+                clearForms();
             } catch (SQLException e1) {
                 JOptionPane.showMessageDialog(frame, "Проверете данните!");
             } catch (Exception e1) {
@@ -955,18 +1011,18 @@ public class MyFrame extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-
             conn = DBConnection.getConnection();
             String sql = "select pu.purchase_id, pu.customer_name, c.address, pu.product_name, pr.color, pu.quantity " +
                     "from purchases pu join customers c on c.f_name || ' ' || c.l_name = pu.customer_name " +
-                    "join products pr on pr.brand || ' ' || pr.model = pu.product_name where c.address=? and pr.color=?";
+                    "join products pr on pr.brand || ' ' || pr.model = pu.product_name " +
+                    "where lower(c.address)=lower(?) and lower(pr.color)=lower(?)";
             try {
                 state = conn.prepareStatement(sql);
                 state.setString(1, inquiry2AddressTF.getText());
                 state.setString(2, inquiry2ColorTF.getText());
                 result = state.executeQuery();
                 inquiry2Table.setModel(new MyModel(result));
-                inquiry2ClearForm();
+                clearForms();
             } catch (SQLException e1) {
                 JOptionPane.showMessageDialog(frame, "Проверете данните!");
             } catch (Exception e1) {
@@ -980,7 +1036,7 @@ public class MyFrame extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             refreshCustomersTable();
-            customerClearForm();
+            clearForms();
         }
     }
 
@@ -989,7 +1045,7 @@ public class MyFrame extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             refreshProductsTable();
-            productClearForm();
+            clearForms();
         }
     }
 
@@ -998,7 +1054,7 @@ public class MyFrame extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             refreshPurchasesTable();
-            purchasesClearForm();
+            clearForms();
         }
     }
 }
