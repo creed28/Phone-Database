@@ -1,3 +1,4 @@
+import java.io.Serial;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
@@ -7,11 +8,12 @@ import javax.swing.table.AbstractTableModel;
 
 public class MyModel extends AbstractTableModel {
 
+    @Serial
     private static final long serialVersionUID = 1L;
     private ResultSet result;
     private int rowCount;
     private int columnCount;
-    private ArrayList<Object> data = new ArrayList<>();
+    private final ArrayList<Object> data = new ArrayList<>();
 
     public MyModel(ResultSet rs) throws Exception {
         setRS(rs);

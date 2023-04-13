@@ -10,9 +10,7 @@ public class DBConnection {
             Class.forName("org.h2.Driver");
             conn = DriverManager.getConnection("jdbc:h2:C:\\Users\\Hristo\\Desktop\\java_sql_project\\Phone4You\\DB\\Database",
                     "sa", "1234");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return conn;
