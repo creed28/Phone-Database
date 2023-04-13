@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,7 +22,6 @@ public class MyFrame extends JFrame {
     // TODO --COMBINE BRAND AND MODEL IN ONE ROW
     // TODO --MAKE MORE SEARCH OPTIONS
     // TODO --TOTAL QUANTITY IN INQUIRY 2
-    // TODO --NAV + BUTTON ONCLICK CLEAR INQUIRY TABLES
     // TODO --IMPROVE CODE + SQL
 
     Connection conn = null;
@@ -147,9 +147,11 @@ public class MyFrame extends JFrame {
 
     // inquiry1 buttons
     JButton inquiry1SearchBt = new JButton("Търсене");
+    JButton inquiry1RefreshBt = new JButton("Обнови");
 
     // inquiry2 buttons
     JButton inquiry2SearchBt = new JButton("Търсене");
+    JButton inquiry2RefreshBt = new JButton("Обнови");
 
     // tables
     JTable customersTable = new JTable();
@@ -177,8 +179,6 @@ public class MyFrame extends JFrame {
 
         nav.addChangeListener(e -> clearForms());
         this.add(nav);
-
-        // adding to panels
 
         // Customer panel -----------------------------------------------------------------------
         customersPanel.setLayout(new GridLayout(3, 1));
@@ -314,6 +314,8 @@ public class MyFrame extends JFrame {
         // inquiry1 mid panel
         inquiry1MidPanel.add(inquiry1SearchBt);
         inquiry1SearchBt.addActionListener(new Inquiry1SearchAction());
+        inquiry1MidPanel.add(inquiry1RefreshBt);
+        inquiry1RefreshBt.addActionListener(new Inquiry1RefreshAction());
         inquiry1Panel.add(inquiry1MidPanel);
 
         // inquiry1 down panel
@@ -338,6 +340,8 @@ public class MyFrame extends JFrame {
         // inquiry2 mid panel
         inquiry2MidPanel.add(inquiry2SearchBt);
         inquiry2SearchBt.addActionListener(new Inquiry2SearchAction());
+        inquiry2MidPanel.add(inquiry2RefreshBt);
+        inquiry2RefreshBt.addActionListener(new Inquiry2RefreshAction());
         inquiry2Panel.add(inquiry2MidPanel);
 
         // inquiry2 down panel
@@ -392,17 +396,17 @@ public class MyFrame extends JFrame {
         conn = DBConnection.getConnection();
         String sql = "select customer_name from purchases";
 
-        clearList(sql, purchaseCustomerNamesList);
+        refreshList(sql, purchaseCustomerNamesList);
     }
 
     public void checkProductPurchaseTable(){
         conn = DBConnection.getConnection();
         String sql = "select product_name from purchases";
 
-        clearList(sql, purchaseCustomerProductsList);
+        refreshList(sql, purchaseCustomerProductsList);
     }
 
-    private void clearList(String sql, ArrayList<String> purchaseList) {
+    private void refreshList(String sql, ArrayList<String> purchaseList) {
         if(purchaseList.size() > 0){
             for(int i = 0; i < purchaseList.size(); i++){
                 purchaseList.remove(i);
@@ -1054,6 +1058,24 @@ public class MyFrame extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             refreshPurchasesTable();
+            clearForms();
+        }
+    }
+
+    class Inquiry1RefreshAction implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            inquiry1Table.setModel(new DefaultTableModel());
+            clearForms();
+        }
+    }
+
+    class Inquiry2RefreshAction implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            inquiry2Table.setModel(new DefaultTableModel());
             clearForms();
         }
     }
