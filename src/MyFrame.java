@@ -10,19 +10,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
 
 public class MyFrame extends JFrame {
 
-    static Connection conn = null;
-    static PreparedStatement state = null;
-    static ResultSet result = null;
-    static int id;
-    static String customerNameS;
-    static String productNameS;
-    static String buff;
-    static ArrayList<String> purchaseCustomerNamesList = new ArrayList<>();
-    static ArrayList<String> purchaseCustomerProductsList = new ArrayList<>();
+    Connection conn = null;
+    PreparedStatement state = null;
+    ResultSet result = null;
+    int id;
+    String customerNameS;
+    String productNameS;
+    String buff;
+    ArrayList<String> purchaseCustomerNamesList = new ArrayList<>();
+    ArrayList<String> purchaseCustomerProductsList = new ArrayList<>();
+    ArrayList<String> items = new ArrayList<>();
 
     // nav
     JTabbedPane nav = new JTabbedPane();
@@ -31,33 +33,33 @@ public class MyFrame extends JFrame {
     JPanel customersPanel = new JPanel();
     JPanel productsPanel = new JPanel();
     JPanel purchasesPanel = new JPanel();
-    JPanel inquiry1Panel = new JPanel();
-    JPanel inquiry2Panel = new JPanel();
+    JPanel inquiryPanel = new JPanel();
 
     // customer panels
     JPanel customersUpPanel = new JPanel();
     JPanel customersMidPanel = new JPanel();
+    JPanel customersRegularBTPanel = new JPanel();
+    JPanel customersSearchBTPanel = new JPanel();
     JPanel customersDownPanel = new JPanel();
 
     // product panels
     JPanel productsUpPanel = new JPanel();
     JPanel productsMidPanel = new JPanel();
+    JPanel productsRegularBTPanel = new JPanel();
+    JPanel productsSearchBTPanel = new JPanel();
     JPanel productsDownPanel = new JPanel();
 
     // purchase panels
     JPanel purchasesUpPanel = new JPanel();
     JPanel purchasesMidPanel = new JPanel();
+    JPanel purchaseRegularBTPanel = new JPanel();
+    JPanel purchaseSearchBTPanel = new JPanel();
     JPanel purchasesDownPanel = new JPanel();
 
-    // inquiry1 panels
-    JPanel inquiry1UpPanel = new JPanel();
-    JPanel inquiry1MidPanel = new JPanel();
-    JPanel inquiry1DownPanel = new JPanel();
-
-    // inquiry2 panels
-    JPanel inquiry2UpPanel = new JPanel();
-    JPanel inquiry2MidPanel = new JPanel();
-    JPanel inquiry2DownPanel = new JPanel();
+    // inquiry panels
+    JPanel inquiryUpPanel = new JPanel();
+    JPanel inquiryMidPanel = new JPanel();
+    JPanel inquiryDownPanel = new JPanel();
 
     // customer labels
     JLabel firstNameLabel = new JLabel("Име:");
@@ -78,12 +80,9 @@ public class MyFrame extends JFrame {
     JLabel productNameLabel = new JLabel("Продукти:");
     JLabel purchaseDateLabel = new JLabel("Дата на покупка:");
 
-    // inquiry1 labels
-    JLabel inquiry1DateLabel = new JLabel("Дата на покупка:");
-
-    //  inquiry2 labels
-    JLabel inquiry2AddressLabel = new JLabel("Адрес:");
-    JLabel inquiry2ColorLabel = new JLabel("Цвят:");
+    //  inquiry labels
+    JLabel inquiryAddressLabel = new JLabel("Адрес:");
+    JLabel inquiryModelLabel = new JLabel("Модел:");
 
     // customer text fields
     JTextField firstNameTF = new JTextField();
@@ -101,15 +100,12 @@ public class MyFrame extends JFrame {
     JTextField quantityTF = new JTextField();
     JTextField purchaseDateTF = new JTextField();
 
-    // inquiry1 text fields
-    JTextField inquiry1TF = new JTextField();
-
-    // inquiry2 text fields
-    JTextField inquiry2AddressTF = new JTextField();
-    JTextField inquiry2ColorTF = new JTextField();
+    // inquiry text fields
+    JTextField inquiryAddressTF = new JTextField();
+    JTextField inquiryModelTF = new JTextField();
 
     // combo boxes
-    String[] brands = {"Samsung Galaxy", "Apple iPhone", "Sony Xperia", "Google Pixel"};
+    String[] brands = {"","Samsung Galaxy", "Apple iPhone", "Sony Xperia", "Google Pixel"};
     JComboBox<String> customerCombo = new JComboBox<>();
     JComboBox<String> productCombo = new JComboBox<>();
     JComboBox<String> brandsCombo = new JComboBox<>(brands);
@@ -118,30 +114,30 @@ public class MyFrame extends JFrame {
     JButton customersAddBt = new JButton("Добавяне");
     JButton customersDeleteBt = new JButton("Изтриване");
     JButton customersEditBt = new JButton("Редактиране");
-    JButton customersSearchBt = new JButton("Търсене по телефонен номер");
     JButton customersRefreshBt = new JButton("Обнови");
+    JButton customersPhoneBt = new JButton("Търсене по телефонен номер");
+    JButton customersAddressBt = new JButton("Търсене по адрес");
 
     // product buttons
     JButton productAddBt = new JButton("Добавяне");
     JButton productEditBt = new JButton("Редактиране");
     JButton productDeleteBt = new JButton("Изтриване");
-    JButton productSearchBt = new JButton("Търсене по размер на памет за съхранение");
     JButton productRefreshBt = new JButton("Обнови");
+    JButton productBrandBt = new JButton("Търсене по марка");
+    JButton productModelBt = new JButton("Търсене по модел");
 
     // purchase buttons
     JButton purchaseAddBt = new JButton("Купуване");
     JButton purchaseEditBt = new JButton("Редактиране");
     JButton purchaseDeleteBt = new JButton("Изтриване");
     JButton purchaseRefreshBt = new JButton("Обнови");
-    JButton purchaseSearchBt = new JButton("Търсене по количество");
+    JButton purchaseCustomerBt = new JButton("Търсене по клиент");
+    JButton purchaseProductBt = new JButton("Търсене по продукт");
+    JButton purchaseDateBt = new JButton("Търсене по дата");
 
-    // inquiry1 buttons
-    JButton inquiry1SearchBt = new JButton("Търсене");
-    JButton inquiry1RefreshBt = new JButton("Обнови");
-
-    // inquiry2 buttons
-    JButton inquiry2SearchBt = new JButton("Търсене");
-    JButton inquiry2RefreshBt = new JButton("Обнови");
+    // inquiry buttons
+    JButton inquirySearchBt = new JButton("Търсене");
+    JButton inquiryRefreshBt = new JButton("Обнови");
 
     // tables
     JTable customersTable = new JTable();
@@ -150,13 +146,11 @@ public class MyFrame extends JFrame {
     JScrollPane productsScroll = new JScrollPane(productsTable);
     JTable purchaseTable = new JTable();
     JScrollPane purchaseScroll = new JScrollPane(purchaseTable);
-    JTable inquiry1Table = new JTable();
-    JScrollPane inquiry1Scroll = new JScrollPane(inquiry1Table);
-    JTable inquiry2Table = new JTable();
-    JScrollPane inquiry2Scroll = new JScrollPane(inquiry2Table);
+    JTable inquiryTable = new JTable();
+    JScrollPane inquiryScroll = new JScrollPane(inquiryTable);
 
     // fonts
-    Font fontTF = new Font("Arial", Font.PLAIN, 20);
+    Font fontTF = new Font("Arial", Font.PLAIN, 18);
     Font fontCombo = new Font("Arial", Font.PLAIN, 18);
 
     // error windows
@@ -168,7 +162,7 @@ public class MyFrame extends JFrame {
         this.setVisible(true);
         this.setResizable(false);
         this.setTitle("Phone4You");
-        ImageIcon img = new ImageIcon("img/phone icon.png");
+        ImageIcon img = new ImageIcon("./img/phone icon.png");
         this.setIconImage(img.getImage());
         this.setBackground(new Color(60, 71, 112));
 
@@ -212,27 +206,36 @@ public class MyFrame extends JFrame {
         customersPanel.add(customersUpPanel);
 
         // customersMidPanel --------------------------------------
+        customersMidPanel.setLayout(new GridLayout(2,1));
         customersMidPanel.setBackground(new Color(60, 71, 112));
-        customersMidPanel.add(customersAddBt);
+        customersRegularBTPanel.setBackground(new Color(60, 71, 112));
+        customersSearchBTPanel.setBackground(new Color(60, 71, 112));
+        customersRegularBTPanel.add(customersAddBt);
         customersAddBt.setBackground(new Color(100, 104, 176));
         customersAddBt.setForeground(new Color(255, 255, 255));
-        customersMidPanel.add(customersDeleteBt);
+        customersRegularBTPanel.add(customersDeleteBt);
         customersDeleteBt.setBackground(new Color(100, 104, 176));
         customersDeleteBt.setForeground(new Color(255, 255, 255));
-        customersMidPanel.add(customersEditBt);
+        customersRegularBTPanel.add(customersEditBt);
         customersEditBt.setBackground(new Color(100, 104, 176));
         customersEditBt.setForeground(new Color(255, 255, 255));
-        customersMidPanel.add(customersSearchBt);
-        customersSearchBt.setBackground(new Color(100, 104, 176));
-        customersSearchBt.setForeground(new Color(255, 255, 255));
-        customersMidPanel.add(customersRefreshBt);
+        customersRegularBTPanel.add(customersRefreshBt);
         customersRefreshBt.setBackground(new Color(100, 104, 176));
         customersRefreshBt.setForeground(new Color(255, 255, 255));
+        customersSearchBTPanel.add(customersPhoneBt);
+        customersPhoneBt.setBackground(new Color(100, 104, 176));
+        customersPhoneBt.setForeground(new Color(255, 255, 255));
+        customersSearchBTPanel.add(customersAddressBt);
+        customersAddressBt.setBackground(new Color(100, 104, 176));
+        customersAddressBt.setForeground(new Color(255, 255, 255));
         customersAddBt.addActionListener(new CustomersAddAction());
         customersEditBt.addActionListener(new CustomersEditAction());
         customersDeleteBt.addActionListener(new CustomersDeleteAction());
-        customersSearchBt.addActionListener(new CustomersSearchAction());
         customersRefreshBt.addActionListener(new CustomersRefreshAction());
+        customersPhoneBt.addActionListener(new CustomersSearchActionPhone());
+        customersAddressBt.addActionListener(new CustomersSearchActionAddress());
+        customersMidPanel.add(customersRegularBTPanel);
+        customersMidPanel.add(customersSearchBTPanel);
         customersPanel.add(customersMidPanel);
 
         // customersDownPanel ----------------------
@@ -287,27 +290,36 @@ public class MyFrame extends JFrame {
         productsPanel.add(productsUpPanel);
 
         // productsMidPanel-----------------------------------
+        productsMidPanel.setLayout(new GridLayout(2, 1));
         productsMidPanel.setBackground(new Color(60, 71, 112));
-        productsMidPanel.add(productAddBt);
+        productsRegularBTPanel.setBackground(new Color(60, 71, 112));
+        productsSearchBTPanel.setBackground(new Color(60, 71, 112));
+        productsRegularBTPanel.add(productAddBt);
         productAddBt.setBackground(new Color(100, 104, 176));
         productAddBt.setForeground(new Color(255, 255, 255));
         productAddBt.addActionListener(new ProductsAddAction());
-        productsMidPanel.add(productDeleteBt);
+        productsRegularBTPanel.add(productDeleteBt);
         productDeleteBt.setBackground(new Color(100, 104, 176));
         productDeleteBt.setForeground(new Color(255, 255, 255));
         productDeleteBt.addActionListener(new ProductsDeleteAction());
-        productsMidPanel.add(productEditBt);
+        productsRegularBTPanel.add(productEditBt);
         productEditBt.setBackground(new Color(100, 104, 176));
         productEditBt.setForeground(new Color(255, 255, 255));
         productEditBt.addActionListener(new ProductsEditAction());
-        productsMidPanel.add(productSearchBt);
-        productSearchBt.setBackground(new Color(100, 104, 176));
-        productSearchBt.setForeground(new Color(255, 255, 255));
-        productSearchBt.addActionListener(new ProductsSearchAction());
-        productsMidPanel.add(productRefreshBt);
+        productsRegularBTPanel.add(productRefreshBt);
         productRefreshBt.setBackground(new Color(100, 104, 176));
         productRefreshBt.setForeground(new Color(255, 255, 255));
         productRefreshBt.addActionListener(new ProductsRefreshAction());
+        productsSearchBTPanel.add(productBrandBt);
+        productBrandBt.setBackground(new Color(100, 104, 176));
+        productBrandBt.setForeground(new Color(255, 255, 255));
+        productBrandBt.addActionListener(new ProductsSearchActionBrand());
+        productsSearchBTPanel.add(productModelBt);
+        productModelBt.setBackground(new Color(100, 104, 176));
+        productModelBt.setForeground(new Color(255, 255, 255));
+        productModelBt.addActionListener(new ProductsSearchActionModel());
+        productsMidPanel.add(productsRegularBTPanel);
+        productsMidPanel.add(productsSearchBTPanel);
         productsPanel.add(productsMidPanel);
 
         // productsDownPanel-----------------------------------
@@ -360,27 +372,40 @@ public class MyFrame extends JFrame {
         purchasesPanel.add(purchasesUpPanel);
 
         // purchaseMidPanel------------------------------------------------
+        purchasesMidPanel.setLayout(new GridLayout(2,1));
+        purchaseRegularBTPanel.setBackground(new Color(60, 71, 112));
+        purchaseSearchBTPanel.setBackground(new Color(60, 71, 112));
         purchasesMidPanel.setBackground(new Color(60, 71, 112));
-        purchasesMidPanel.add(purchaseAddBt);
+        purchaseRegularBTPanel.add(purchaseAddBt);
         purchaseAddBt.setBackground(new Color(100, 104, 176));
         purchaseAddBt.setForeground(new Color(255, 255, 255));
         purchaseAddBt.addActionListener(new PurchaseAddAction());
-        purchasesMidPanel.add(purchaseDeleteBt);
+        purchaseRegularBTPanel.add(purchaseDeleteBt);
         purchaseDeleteBt.setBackground(new Color(100, 104, 176));
         purchaseDeleteBt.setForeground(new Color(255, 255, 255));
         purchaseDeleteBt.addActionListener(new PurchasesDeleteAction());
-        purchasesMidPanel.add(purchaseEditBt);
+        purchaseRegularBTPanel.add(purchaseEditBt);
         purchaseEditBt.setBackground(new Color(100, 104, 176));
         purchaseEditBt.setForeground(new Color(255, 255, 255));
         purchaseEditBt.addActionListener(new PurchaseEditAction());
-        purchasesMidPanel.add(purchaseSearchBt);
-        purchaseSearchBt.setBackground(new Color(100, 104, 176));
-        purchaseSearchBt.setForeground(new Color(255, 255, 255));
-        purchaseSearchBt.addActionListener(new PurchasesSearchAction());
-        purchasesMidPanel.add(purchaseRefreshBt);
+        purchaseRegularBTPanel.add(purchaseRefreshBt);
         purchaseRefreshBt.setBackground(new Color(100, 104, 176));
         purchaseRefreshBt.setForeground(new Color(255, 255, 255));
         purchaseRefreshBt.addActionListener(new PurchasesRefreshAction());
+        purchaseSearchBTPanel.add(purchaseCustomerBt);
+        purchaseCustomerBt.setBackground(new Color(100, 104, 176));
+        purchaseCustomerBt.setForeground(new Color(255, 255, 255));
+        purchaseCustomerBt.addActionListener(new PurchasesSearchActionCustomer());
+        purchaseSearchBTPanel.add(purchaseProductBt);
+        purchaseProductBt.setBackground(new Color(100, 104, 176));
+        purchaseProductBt.setForeground(new Color(255, 255, 255));
+        purchaseProductBt.addActionListener(new PurchasesSearchActionProduct());
+        purchaseSearchBTPanel.add(purchaseDateBt);
+        purchaseDateBt.setBackground(new Color(100, 104, 176));
+        purchaseDateBt.setForeground(new Color(255, 255, 255));
+        purchaseDateBt.addActionListener(new PurchasesSearchActionDate());
+        purchasesMidPanel.add(purchaseRegularBTPanel);
+        purchasesMidPanel.add(purchaseSearchBTPanel);
         purchasesPanel.add(purchasesMidPanel);
 
         // purchasesDownPanel--------------------------------------------
@@ -395,71 +420,48 @@ public class MyFrame extends JFrame {
         checkCustomerPurchaseTable();
         checkProductPurchaseTable();
 
-        // Inquiry1 panel-------------------------------------------------------
-        inquiry1Panel.setLayout(new GridLayout(3, 1));
-        nav.add(inquiry1Panel, "Справка - дата");
+        // Inquiry panel--------------------------------------------------------------
+        inquiryPanel.setLayout(new GridLayout(3, 1));
+        inquiryPanel.setBackground(new Color(60, 71, 112));
+        nav.add(inquiryPanel, "Справка");
 
-        // inquiry1 up panel
-        inquiry1UpPanel.add(inquiry1DateLabel);
-        inquiry1TF.setPreferredSize(new Dimension(780, 35));
-        inquiry1UpPanel.add(inquiry1TF);
-        inquiry1Panel.add(inquiry1UpPanel);
+        // inquiry up panel
+        inquiryUpPanel.setBackground(new Color(60, 71, 112));
+        inquiryUpPanel.add(inquiryAddressLabel);
+        inquiryAddressLabel.setForeground(new Color(235, 124, 163));
+        inquiryUpPanel.add(inquiryAddressTF);
+        inquiryAddressTF.setBackground(new Color(85, 94, 133));
+        inquiryAddressTF.setForeground(new Color(255, 255, 255));
+        inquiryAddressTF.setFont(fontTF);
+        inquiryAddressTF.setPreferredSize(new Dimension(800, 35));
+        inquiryUpPanel.add(inquiryModelLabel);
+        inquiryModelLabel.setForeground(new Color(235, 124, 163));
+        inquiryUpPanel.add(inquiryModelTF);
+        inquiryModelTF.setBackground(new Color(85, 94, 133));
+        inquiryModelTF.setForeground(new Color(255, 255, 255));
+        inquiryModelTF.setFont(fontTF);
+        inquiryModelTF.setPreferredSize(new Dimension(800, 35));
+        inquiryPanel.add(inquiryUpPanel);
 
-        // inquiry1 mid panel
-        inquiry1MidPanel.add(inquiry1SearchBt);
-        inquiry1SearchBt.addActionListener(new Inquiry1SearchAction());
-        inquiry1MidPanel.add(inquiry1RefreshBt);
-        inquiry1RefreshBt.addActionListener(new Inquiry1RefreshAction());
-        inquiry1Panel.add(inquiry1MidPanel);
+        // inquiry mid panel
+        inquiryMidPanel.setBackground(new Color(60, 71, 112));
+        inquiryMidPanel.add(inquirySearchBt);
+        inquirySearchBt.setBackground(new Color(100, 104, 176));
+        inquirySearchBt.setForeground(new Color(255, 255, 255));
+        inquirySearchBt.addActionListener(new InquirySearchAction());
+        inquiryMidPanel.add(inquiryRefreshBt);
+        inquiryRefreshBt.setBackground(new Color(100, 104, 176));
+        inquiryRefreshBt.setForeground(new Color(255, 255, 255));
+        inquiryRefreshBt.addActionListener(new InquiryRefreshAction());
+        inquiryPanel.add(inquiryMidPanel);
 
-        // inquiry1 down panel
-        inquiry1Table.addMouseListener(new Inquiry1MouseAction());
-        inquiry1Scroll.setPreferredSize(new Dimension(550,150));
-        inquiry1DownPanel.add(inquiry1Scroll);
-        inquiry1Panel.add(inquiry1DownPanel);
-
-        // Inquiry2 panel--------------------------------------------------------------
-        inquiry2Panel.setLayout(new GridLayout(3, 1));
-        inquiry2Panel.setBackground(new Color(60, 71, 112));
-        nav.add(inquiry2Panel, "Справка - адрес, цвят");
-
-        // inquiry2 up panel
-        inquiry2UpPanel.setBackground(new Color(60, 71, 112));
-        inquiry2UpPanel.add(inquiry2AddressLabel);
-        inquiry2AddressLabel.setForeground(new Color(235, 124, 163));
-        inquiry2UpPanel.add(inquiry2AddressTF);
-        inquiry2AddressTF.setBackground(new Color(85, 94, 133));
-        inquiry2AddressTF.setForeground(new Color(255, 255, 255));
-        inquiry2AddressTF.setFont(fontTF);
-        inquiry2AddressTF.setPreferredSize(new Dimension(800, 35));
-        inquiry2UpPanel.add(inquiry2ColorLabel);
-        inquiry2ColorLabel.setForeground(new Color(235, 124, 163));
-        inquiry2UpPanel.add(inquiry2ColorTF);
-        inquiry2ColorTF.setBackground(new Color(85, 94, 133));
-        inquiry2ColorTF.setForeground(new Color(255, 255, 255));
-        inquiry2ColorTF.setFont(fontTF);
-        inquiry2ColorTF.setPreferredSize(new Dimension(800, 35));
-        inquiry2Panel.add(inquiry2UpPanel);
-
-        // inquiry2 mid panel
-        inquiry2MidPanel.setBackground(new Color(60, 71, 112));
-        inquiry2MidPanel.add(inquiry2SearchBt);
-        inquiry2SearchBt.setBackground(new Color(100, 104, 176));
-        inquiry2SearchBt.setForeground(new Color(255, 255, 255));
-        inquiry2SearchBt.addActionListener(new Inquiry2SearchAction());
-        inquiry2MidPanel.add(inquiry2RefreshBt);
-        inquiry2RefreshBt.setBackground(new Color(100, 104, 176));
-        inquiry2RefreshBt.setForeground(new Color(255, 255, 255));
-        inquiry2RefreshBt.addActionListener(new Inquiry2RefreshAction());
-        inquiry2Panel.add(inquiry2MidPanel);
-
-        // inquiry2 down panel
-        inquiry2DownPanel.setBackground(new Color(60, 71, 112));
-        inquiry2Table.setBackground(new Color(223, 224, 230));
-        inquiry2Table.addMouseListener(new Inquiry2MouseAction());
-        inquiry2Scroll.setPreferredSize(new Dimension(800,150));
-        inquiry2DownPanel.add(inquiry2Scroll);
-        inquiry2Panel.add(inquiry2DownPanel);
+        // inquiry down panel
+        inquiryDownPanel.setBackground(new Color(60, 71, 112));
+        inquiryTable.setBackground(new Color(223, 224, 230));
+        inquiryTable.addMouseListener(new InquiryMouseAction());
+        inquiryScroll.setPreferredSize(new Dimension(800,150));
+        inquiryDownPanel.add(inquiryScroll);
+        inquiryPanel.add(inquiryDownPanel);
     }
 
     public void refreshCustomersTable() {
@@ -491,7 +493,7 @@ public class MyFrame extends JFrame {
     public void refreshPurchasesTable() {
         conn = DBConnection.getConnection();
         try {
-            state = conn.prepareStatement(" select pu.purchase_id, c.customer_id, pu.customer_name, pr.product_id, pu.product_name, " +
+            state = conn.prepareStatement("select pu.purchase_id, pu.customer_name, c.address, pu.product_name, " +
                     "pu.quantity, pu.purchase_date from purchases pu join customers c on c.f_name || ' ' || c.l_name = pu.customer_name" +
                     " join products pr on pr.brand || ' ' || pr.model = pu.product_name");
             result = state.executeQuery();
@@ -557,12 +559,30 @@ public class MyFrame extends JFrame {
         try {
             state = conn.prepareStatement(sql);
             result = state.executeQuery();
+
             while(result.next()) {
                 buff = result.getObject(1).toString() + " " + result.getObject(2).toString();
-                combo.addItem(buff);
+                items.add(buff);
             }
+
+            sortCombo(combo);
+
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void sortCombo(JComboBox<String> combo){
+        Collections.sort(items);
+        combo.addItem("");
+
+        for (String item : items) {
+            combo.addItem(item);
+        }
+
+        for(int i = 0; i < items.size(); i++){
+            items.remove(i);
+            i--;
         }
     }
 
@@ -577,9 +597,8 @@ public class MyFrame extends JFrame {
         productColorTF.setText("");
         quantityTF.setText("");
         purchaseDateTF.setText("");
-        inquiry1TF.setText("");
-        inquiry2AddressTF.setText("");
-        inquiry2ColorTF.setText("");
+        inquiryAddressTF.setText("");
+        inquiryModelTF.setText("");
     }
 
     class CustomersMouseAction implements MouseListener {
@@ -616,22 +635,13 @@ public class MyFrame extends JFrame {
 
     }
 
-
     class ProductsMouseAction implements MouseListener {
 
         @Override
         public void mouseClicked(MouseEvent e) {
             int row = productsTable.getSelectedRow();
             id = Integer.parseInt(productsTable.getValueAt(row, 0).toString());
-            if (productsTable.getValueAt(row,1).toString().equals("Samsung Galaxy")) {
-                brandsCombo.setSelectedIndex(0);
-            } else if(productsTable.getValueAt(row,1).toString().equals("Apple iPhone")){
-                brandsCombo.setSelectedIndex(1);
-            } else if(productsTable.getValueAt(row,1).toString().equals("Sony Xperia")){
-                brandsCombo.setSelectedIndex(2);
-            } else {
-                brandsCombo.setSelectedIndex(3);
-            }
+            brandsCombo.setSelectedItem(productsTable.getValueAt(row, 1).toString());
             productModelTF.setText(productsTable.getValueAt(row, 2).toString());
             productPriceTF.setText(productsTable.getValueAt(row,3).toString());
             productStorageTF.setText(productsTable.getValueAt(row,4).toString());
@@ -665,10 +675,10 @@ public class MyFrame extends JFrame {
         public void mouseClicked(MouseEvent e) {
             int row = purchaseTable.getSelectedRow();
             id = Integer.parseInt(purchaseTable.getValueAt(row, 0).toString());
-            customerCombo.setSelectedItem(purchaseTable.getValueAt(row, 2).toString());
-            productCombo.setSelectedItem(purchaseTable.getValueAt(row, 4).toString());
-            quantityTF.setText(purchaseTable.getValueAt(row, 5).toString());
-            purchaseDateTF.setText(purchaseTable.getValueAt(row, 6).toString());
+            customerCombo.setSelectedItem(purchaseTable.getValueAt(row, 1).toString());
+            productCombo.setSelectedItem(purchaseTable.getValueAt(row, 3).toString());
+            quantityTF.setText(purchaseTable.getValueAt(row, 4).toString());
+            purchaseDateTF.setText(purchaseTable.getValueAt(row, 5).toString());
         }
 
         @Override
@@ -692,42 +702,13 @@ public class MyFrame extends JFrame {
         }
     }
 
-    class Inquiry1MouseAction implements MouseListener {
+    class InquiryMouseAction implements MouseListener {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            int row = inquiry1Table.getSelectedRow();
-            inquiry1TF.setText(inquiry1Table.getValueAt(row, 4).toString());
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-
-        }
-    }
-
-    class Inquiry2MouseAction implements MouseListener {
-
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            int row = inquiry2Table.getSelectedRow();
-            inquiry2AddressTF.setText(inquiry2Table.getValueAt(row, 2).toString());
-            inquiry2ColorTF.setText(inquiry2Table.getValueAt(row, 4).toString());
+            int row = inquiryTable.getSelectedRow();
+            inquiryAddressTF.setText(inquiryTable.getValueAt(row, 2).toString());
+            inquiryModelTF.setText(inquiryTable.getValueAt(row, 4).toString());
         }
 
         @Override
@@ -789,6 +770,12 @@ public class MyFrame extends JFrame {
             conn = DBConnection.getConnection();
             String sql = "insert into products(brand, model, price, storage, color) values(?,?,?,?,?)";
             try {
+                if(Objects.requireNonNull(brandsCombo.getSelectedItem()).toString().equals("") || productModelTF.getText().equals("") ||
+                        productColorTF.getText().equals("")){
+                    JOptionPane.showMessageDialog(frame, "Проверете данните!");
+                    return;
+                }
+
                 state = conn.prepareStatement(sql);
                 state.setString(1, Objects.requireNonNull(brandsCombo.getSelectedItem()).toString());
                 state.setString(2, productModelTF.getText());
@@ -817,6 +804,12 @@ public class MyFrame extends JFrame {
             conn = DBConnection.getConnection();
             String sql ="insert into purchases(customer_name, product_name, quantity, purchase_date) values(?,?,?,?)";
             try {
+                if(Objects.requireNonNull(customerCombo.getSelectedItem()).toString().equals("") ||
+                   Objects.requireNonNull(productCombo.getSelectedItem()).toString().equals("")){
+                    JOptionPane.showMessageDialog(frame, "Проверете данните!");
+                    return;
+                }
+
                 state = conn.prepareStatement(sql);
                 state.setString(1, Objects.requireNonNull(customerCombo.getSelectedItem()).toString());
                 state.setString(2, Objects.requireNonNull(productCombo.getSelectedItem()).toString());
@@ -867,7 +860,6 @@ public class MyFrame extends JFrame {
                     JOptionPane.showMessageDialog(frame, "Проверете данните!");
                 }
             }
-
         }
     }
 
@@ -877,6 +869,12 @@ public class MyFrame extends JFrame {
                 String sql = "update products set brand=?, model=?, price=?, storage=?, color=? where product_id=?";
 
                 try {
+                    if(Objects.requireNonNull(brandsCombo.getSelectedItem()).toString().equals("") || productModelTF.getText().equals("") ||
+                            productColorTF.getText().equals("")){
+                        JOptionPane.showMessageDialog(frame, "Проверете данните!");
+                        return;
+                    }
+
                     state = conn.prepareStatement(sql);
                     state.setString(1, Objects.requireNonNull(brandsCombo.getSelectedItem()).toString());
                     state.setString(2, productModelTF.getText());
@@ -896,7 +894,6 @@ public class MyFrame extends JFrame {
                     JOptionPane.showMessageDialog(frame, "Проверете данните!");
                 }
             }
-
         }
     }
 
@@ -906,6 +903,12 @@ public class MyFrame extends JFrame {
                 String sql = "update purchases set customer_name=?, product_name=?, quantity=?, purchase_date=? where purchase_id=?";
 
                 try {
+                    if(Objects.requireNonNull(customerCombo.getSelectedItem()).toString().equals("") ||
+                            Objects.requireNonNull(productCombo.getSelectedItem()).toString().equals("")){
+                        JOptionPane.showMessageDialog(frame, "Проверете данните!");
+                        return;
+                    }
+
                     state = conn.prepareStatement(sql);
                     state.setString(1, Objects.requireNonNull(customerCombo.getSelectedItem()).toString());
                     state.setString(2, Objects.requireNonNull(productCombo.getSelectedItem()).toString());
@@ -924,7 +927,6 @@ public class MyFrame extends JFrame {
                     JOptionPane.showMessageDialog(frame, "Проверете данните!");
                 }
             }
-
         }
     }
 
@@ -973,7 +975,6 @@ public class MyFrame extends JFrame {
                 e1.printStackTrace();
             }
         }
-
     }
 
     class ProductsDeleteAction implements ActionListener {
@@ -1021,7 +1022,6 @@ public class MyFrame extends JFrame {
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
-
         }
     }
 
@@ -1030,11 +1030,11 @@ public class MyFrame extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             conn = DBConnection.getConnection();
-            String sql="delete from purchases where purchase_id=?";
+            String sql = "delete from purchases where purchase_id=?";
 
             try {
                 state = conn.prepareStatement(sql);
-                state.setInt(1,id);
+                state.setInt(1, id);
                 state.execute();
                 id = -1;
                 refreshPurchasesTable();
@@ -1044,11 +1044,10 @@ public class MyFrame extends JFrame {
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
-
         }
     }
 
-    class CustomersSearchAction implements ActionListener {
+    class CustomersSearchActionPhone implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -1069,16 +1068,42 @@ public class MyFrame extends JFrame {
         }
     }
 
-    class ProductsSearchAction implements ActionListener {
+    class CustomersSearchActionAddress implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
             conn = DBConnection.getConnection();
-            String sql = "select * from products where storage=?";
+            String sql = "select * from customers where lower(address)=lower(?)";
+
+            try {
+                if(addressTF.getText().equals("")){
+                    JOptionPane.showMessageDialog(frame, "Проверете данните!");
+                    return;
+                }
+
+                state = conn.prepareStatement(sql);
+                state.setString(1, addressTF.getText());
+                result = state.executeQuery();
+                customersTable.setModel(new MyModel(result));
+                clearForms();
+            } catch (SQLException e1) {
+                JOptionPane.showMessageDialog(frame, "Проверете данните!");
+            } catch (Exception e1) {
+                JOptionPane.showMessageDialog(frame, "Проверете данните!");
+            }
+        }
+    }
+
+    class ProductsSearchActionBrand implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            conn = DBConnection.getConnection();
+            String sql = "select * from products where brand=?";
 
             try {
                 state = conn.prepareStatement(sql);
-                state.setString(1, productStorageTF.getText());
+                state.setString(1, Objects.requireNonNull(brandsCombo.getSelectedItem()).toString());
                 result = state.executeQuery();
                 productsTable.setModel(new MyModel(result));
                 clearForms();
@@ -1090,18 +1115,39 @@ public class MyFrame extends JFrame {
         }
     }
 
-    class PurchasesSearchAction implements ActionListener {
+    class ProductsSearchActionModel implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
             conn = DBConnection.getConnection();
-            String sql = " select pu.purchase_id, c.customer_id, pu.customer_name, pr.product_id, pu.product_name, " +
-                    "pu.quantity, pu.purchase_date from purchases pu join customers c on c.f_name || ' ' || c.l_name = pu.customer_name" +
-                    " join products pr on pr.brand || ' ' || pr.model = pu.product_name where quantity = ?";
+            String sql = "select * from products where lower(model)=lower(?)";
 
             try {
                 state = conn.prepareStatement(sql);
-                state.setString(1, quantityTF.getText());
+                state.setString(1, productModelTF.getText());
+                result = state.executeQuery();
+                productsTable.setModel(new MyModel(result));
+                clearForms();
+            } catch (SQLException e1) {
+                JOptionPane.showMessageDialog(frame, "Проверете данните!");
+            } catch (Exception e1) {
+                JOptionPane.showMessageDialog(frame, "Проверете данните!");
+            }
+        }
+    }
+
+    class PurchasesSearchActionCustomer implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            conn = DBConnection.getConnection();
+            String sql = "select pu.purchase_id, pu.customer_name, c.address, pu.product_name, " +
+                    "pu.quantity, pu.purchase_date from purchases pu join customers c on c.f_name || ' ' || c.l_name = pu.customer_name" +
+                    " join products pr on pr.brand || ' ' || pr.model = pu.product_name where pu.customer_name = ?";
+
+            try {
+                state = conn.prepareStatement(sql);
+                state.setString(1, Objects.requireNonNull(customerCombo.getSelectedItem()).toString());
                 result = state.executeQuery();
                 purchaseTable.setModel(new MyModel(result));
                 clearForms();
@@ -1113,18 +1159,20 @@ public class MyFrame extends JFrame {
         }
     }
 
-    class Inquiry1SearchAction implements ActionListener {
+    class PurchasesSearchActionProduct implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
             conn = DBConnection.getConnection();
-            String sql = "select purchase_id, customer_name, product_name, quantity, purchase_date from purchases where purchase_date=?";
+            String sql = "select pu.purchase_id, pu.customer_name, c.address, pu.product_name, " +
+                    "pu.quantity, pu.purchase_date from purchases pu join customers c on c.f_name || ' ' || c.l_name = pu.customer_name" +
+                    " join products pr on pr.brand || ' ' || pr.model = pu.product_name where pu.product_name = ?";
 
             try {
                 state = conn.prepareStatement(sql);
-                state.setString(1, inquiry1TF.getText());
+                state.setString(1, Objects.requireNonNull(productCombo.getSelectedItem()).toString());
                 result = state.executeQuery();
-                inquiry1Table.setModel(new MyModel(result));
+                purchaseTable.setModel(new MyModel(result));
                 clearForms();
             } catch (SQLException e1) {
                 JOptionPane.showMessageDialog(frame, "Проверете данните!");
@@ -1134,26 +1182,49 @@ public class MyFrame extends JFrame {
         }
     }
 
-    class Inquiry2SearchAction implements ActionListener {
+    class PurchasesSearchActionDate implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
             conn = DBConnection.getConnection();
-            String sql = "select pu.purchase_id, pu.customer_name, c.address, pu.product_name, pr.color, pu.quantity " +
+            String sql = "select pu.purchase_id, pu.customer_name, c.address, pu.product_name, " +
+                    "pu.quantity, pu.purchase_date from purchases pu join customers c on c.f_name || ' ' || c.l_name = pu.customer_name" +
+                    " join products pr on pr.brand || ' ' || pr.model = pu.product_name where pu.purchase_date = ?";
+
+            try {
+                state = conn.prepareStatement(sql);
+                state.setString(1, purchaseDateTF.getText());
+                result = state.executeQuery();
+                purchaseTable.setModel(new MyModel(result));
+                clearForms();
+            } catch (SQLException e1) {
+                JOptionPane.showMessageDialog(frame, "Проверете данните!");
+            } catch (Exception e1) {
+                JOptionPane.showMessageDialog(frame, "Проверете данните!");
+            }
+        }
+    }
+
+    class InquirySearchAction implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            conn = DBConnection.getConnection();
+            String sql = "select pu.purchase_id, pu.customer_name, c.address, pr.brand, pr.model, pr.color, pu.quantity " +
                     "from purchases pu join customers c on c.f_name || ' ' || c.l_name = pu.customer_name " +
                     "join products pr on pr.brand || ' ' || pr.model = pu.product_name " +
-                    "where lower(c.address)=lower(?) and lower(pr.color)=lower(?)";
+                    "where lower(c.address)=lower(?) and lower(pr.model)=lower(?)";
             try {
-                if(inquiry2AddressTF.getText().equals("") || inquiry2ColorTF.getText().equals("")){
+                if(inquiryAddressTF.getText().equals("") || inquiryModelTF.getText().equals("")){
                     JOptionPane.showMessageDialog(frame, "Проверете данните!");
                     return;
                 }
 
                 state = conn.prepareStatement(sql);
-                state.setString(1, inquiry2AddressTF.getText());
-                state.setString(2, inquiry2ColorTF.getText());
+                state.setString(1, inquiryAddressTF.getText());
+                state.setString(2, inquiryModelTF.getText());
                 result = state.executeQuery();
-                inquiry2Table.setModel(new MyModel(result));
+                inquiryTable.setModel(new MyModel(result));
                 clearForms();
             } catch (Exception e1) {
                 JOptionPane.showMessageDialog(frame, "Проверете данните!");
@@ -1188,20 +1259,11 @@ public class MyFrame extends JFrame {
         }
     }
 
-    class Inquiry1RefreshAction implements ActionListener {
+    class InquiryRefreshAction implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            inquiry1Table.setModel(new DefaultTableModel());
-            clearForms();
-        }
-    }
-
-    class Inquiry2RefreshAction implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            inquiry2Table.setModel(new DefaultTableModel());
+            inquiryTable.setModel(new DefaultTableModel());
             clearForms();
         }
     }
