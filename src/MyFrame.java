@@ -1,7 +1,6 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -228,12 +227,12 @@ public class MyFrame extends JFrame {
         customersSearchBTPanel.add(customersAddressBt);
         customersAddressBt.setBackground(new Color(100, 104, 176));
         customersAddressBt.setForeground(new Color(255, 255, 255));
-        customersAddBt.addActionListener(new CustomersAddAction());
-        customersEditBt.addActionListener(new CustomersEditAction());
-        customersDeleteBt.addActionListener(new CustomersDeleteAction());
-        customersRefreshBt.addActionListener(new CustomersRefreshAction());
-        customersPhoneBt.addActionListener(new CustomersSearchActionPhone());
-        customersAddressBt.addActionListener(new CustomersSearchActionAddress());
+        customersAddBt.addActionListener(addCustomer());
+        customersDeleteBt.addActionListener(deleteCustomer());
+        customersEditBt.addActionListener(editCustomer());
+        customersRefreshBt.addActionListener(refreshCustomer());
+        customersPhoneBt.addActionListener(searchPhoneCustomer());
+        customersAddressBt.addActionListener(searchAddressCustomer());
         customersMidPanel.add(customersRegularBTPanel);
         customersMidPanel.add(customersSearchBTPanel);
         customersPanel.add(customersMidPanel);
@@ -297,27 +296,27 @@ public class MyFrame extends JFrame {
         productsRegularBTPanel.add(productAddBt);
         productAddBt.setBackground(new Color(100, 104, 176));
         productAddBt.setForeground(new Color(255, 255, 255));
-        productAddBt.addActionListener(new ProductsAddAction());
+        productAddBt.addActionListener(addProduct());
         productsRegularBTPanel.add(productDeleteBt);
         productDeleteBt.setBackground(new Color(100, 104, 176));
         productDeleteBt.setForeground(new Color(255, 255, 255));
-        productDeleteBt.addActionListener(new ProductsDeleteAction());
+        productDeleteBt.addActionListener(deleteProduct());
         productsRegularBTPanel.add(productEditBt);
         productEditBt.setBackground(new Color(100, 104, 176));
         productEditBt.setForeground(new Color(255, 255, 255));
-        productEditBt.addActionListener(new ProductsEditAction());
+        productEditBt.addActionListener(editProduct());
         productsRegularBTPanel.add(productRefreshBt);
         productRefreshBt.setBackground(new Color(100, 104, 176));
         productRefreshBt.setForeground(new Color(255, 255, 255));
-        productRefreshBt.addActionListener(new ProductsRefreshAction());
+        productRefreshBt.addActionListener(refreshProduct());
         productsSearchBTPanel.add(productBrandBt);
         productBrandBt.setBackground(new Color(100, 104, 176));
         productBrandBt.setForeground(new Color(255, 255, 255));
-        productBrandBt.addActionListener(new ProductsSearchActionBrand());
+        productBrandBt.addActionListener(searchBrandProduct());
         productsSearchBTPanel.add(productModelBt);
         productModelBt.setBackground(new Color(100, 104, 176));
         productModelBt.setForeground(new Color(255, 255, 255));
-        productModelBt.addActionListener(new ProductsSearchActionModel());
+        productModelBt.addActionListener(searchModelProduct());
         productsMidPanel.add(productsRegularBTPanel);
         productsMidPanel.add(productsSearchBTPanel);
         productsPanel.add(productsMidPanel);
@@ -379,31 +378,31 @@ public class MyFrame extends JFrame {
         purchaseRegularBTPanel.add(purchaseAddBt);
         purchaseAddBt.setBackground(new Color(100, 104, 176));
         purchaseAddBt.setForeground(new Color(255, 255, 255));
-        purchaseAddBt.addActionListener(new PurchaseAddAction());
+        purchaseAddBt.addActionListener(addPurchase());
         purchaseRegularBTPanel.add(purchaseDeleteBt);
         purchaseDeleteBt.setBackground(new Color(100, 104, 176));
         purchaseDeleteBt.setForeground(new Color(255, 255, 255));
-        purchaseDeleteBt.addActionListener(new PurchasesDeleteAction());
+        purchaseDeleteBt.addActionListener(deletePurchase());
         purchaseRegularBTPanel.add(purchaseEditBt);
         purchaseEditBt.setBackground(new Color(100, 104, 176));
         purchaseEditBt.setForeground(new Color(255, 255, 255));
-        purchaseEditBt.addActionListener(new PurchaseEditAction());
+        purchaseEditBt.addActionListener(editPurchase());
         purchaseRegularBTPanel.add(purchaseRefreshBt);
         purchaseRefreshBt.setBackground(new Color(100, 104, 176));
         purchaseRefreshBt.setForeground(new Color(255, 255, 255));
-        purchaseRefreshBt.addActionListener(new PurchasesRefreshAction());
+        purchaseRefreshBt.addActionListener(refreshPurchase());
         purchaseSearchBTPanel.add(purchaseCustomerBt);
         purchaseCustomerBt.setBackground(new Color(100, 104, 176));
         purchaseCustomerBt.setForeground(new Color(255, 255, 255));
-        purchaseCustomerBt.addActionListener(new PurchasesSearchActionCustomer());
+        purchaseCustomerBt.addActionListener(searchCustomerPurchase());
         purchaseSearchBTPanel.add(purchaseProductBt);
         purchaseProductBt.setBackground(new Color(100, 104, 176));
         purchaseProductBt.setForeground(new Color(255, 255, 255));
-        purchaseProductBt.addActionListener(new PurchasesSearchActionProduct());
+        purchaseProductBt.addActionListener(searchProductPurchase());
         purchaseSearchBTPanel.add(purchaseDateBt);
         purchaseDateBt.setBackground(new Color(100, 104, 176));
         purchaseDateBt.setForeground(new Color(255, 255, 255));
-        purchaseDateBt.addActionListener(new PurchasesSearchActionDate());
+        purchaseDateBt.addActionListener(searchDatePurchase());
         purchasesMidPanel.add(purchaseRegularBTPanel);
         purchasesMidPanel.add(purchaseSearchBTPanel);
         purchasesPanel.add(purchasesMidPanel);
@@ -448,11 +447,11 @@ public class MyFrame extends JFrame {
         inquiryMidPanel.add(inquirySearchBt);
         inquirySearchBt.setBackground(new Color(100, 104, 176));
         inquirySearchBt.setForeground(new Color(255, 255, 255));
-        inquirySearchBt.addActionListener(new InquirySearchAction());
+        inquirySearchBt.addActionListener(searchInquiry());
         inquiryMidPanel.add(inquiryRefreshBt);
         inquiryRefreshBt.setBackground(new Color(100, 104, 176));
         inquiryRefreshBt.setForeground(new Color(255, 255, 255));
-        inquiryRefreshBt.addActionListener(new InquiryRefreshAction());
+        inquiryRefreshBt.addActionListener(refreshInquiry());
         inquiryPanel.add(inquiryMidPanel);
 
         // inquiry down panel
@@ -493,9 +492,11 @@ public class MyFrame extends JFrame {
     public void refreshPurchasesTable() {
         conn = DBConnection.getConnection();
         try {
-            state = conn.prepareStatement("select pu.purchase_id, pu.customer_name, c.address, pu.product_name, " +
-                    "pu.quantity, pu.purchase_date from purchases pu join customers c on c.f_name || ' ' || c.l_name = pu.customer_name" +
-                    " join products pr on pr.brand || ' ' || pr.model = pu.product_name");
+            state = conn.prepareStatement("SELECT pu.purchase_id, pu.customer_name, c.address, pu.product_name, " +
+                    "pu.quantity, pr.price * pu.quantity as total_price, pu.purchase_date " +
+                    "FROM purchases pu " +
+                    "JOIN customers c ON c.f_name || ' ' || c.l_name = pu.customer_name " +
+                    "JOIN products pr ON pr.brand || ' ' || pr.model = pu.product_name");
             result = state.executeQuery();
             purchaseTable.setModel(new MyModel(result));
         } catch (SQLException e) {
@@ -519,7 +520,7 @@ public class MyFrame extends JFrame {
         refreshList(sql, purchaseCustomerProductsList);
     }
 
-    private void refreshList(String sql, ArrayList<String> purchaseList) {
+    public void refreshList(String sql, ArrayList<String> purchaseList) {
         if(purchaseList.size() > 0){
             for(int i = 0; i < purchaseList.size(); i++){
                 purchaseList.remove(i);
@@ -555,7 +556,7 @@ public class MyFrame extends JFrame {
         fillCombo(sql, productCombo);
     }
 
-    private void fillCombo(String sql, JComboBox<String> combo) {
+    public void fillCombo(String sql, JComboBox<String> combo) {
         try {
             state = conn.prepareStatement(sql);
             result = state.executeQuery();
@@ -678,7 +679,7 @@ public class MyFrame extends JFrame {
             customerCombo.setSelectedItem(purchaseTable.getValueAt(row, 1).toString());
             productCombo.setSelectedItem(purchaseTable.getValueAt(row, 3).toString());
             quantityTF.setText(purchaseTable.getValueAt(row, 4).toString());
-            purchaseDateTF.setText(purchaseTable.getValueAt(row, 5).toString());
+            purchaseDateTF.setText(purchaseTable.getValueAt(row, 6).toString());
         }
 
         @Override
@@ -732,58 +733,58 @@ public class MyFrame extends JFrame {
         }
     }
 
-    class CustomersAddAction implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-
+    public ActionListener addCustomer() {
+        return e -> {
             conn = DBConnection.getConnection();
-            String sql = "insert into customers(f_name, l_name, phone, address) values(?,?,?,?)";
+            String sqlSelect = "SELECT * FROM customers WHERE phone = ?";
+            String sqlInsert = "INSERT INTO customers(f_name, l_name, phone, address) VALUES (?, ?, ?, ?)";
             try {
-                if(firstNameTF.getText().equals("") || lastNameTF.getText().equals("") ||
-                        phoneTF.getText().equals("")|| addressTF.getText().equals("")){
+                if (firstNameTF.getText().equals("") || lastNameTF.getText().equals("") ||
+                        phoneTF.getText().equals("") || addressTF.getText().equals("")) {
                     JOptionPane.showMessageDialog(frame, "Проверете данните!");
                     return;
                 }
 
-                state = conn.prepareStatement(sql);
-                state.setString(1, firstNameTF.getText());
-                state.setString(2, lastNameTF.getText());
-                state.setString(3, phoneTF.getText());
-                state.setString(4, addressTF.getText());
+                PreparedStatement stateSelect = conn.prepareStatement(sqlSelect);
+                stateSelect.setString(1, phoneTF.getText());
+                ResultSet result1 = stateSelect.executeQuery();
+                if (result1.next()) {
+                    JOptionPane.showMessageDialog(frame, "Съществува потребител с този телефонен номер!");
+                    return;
+                }
 
-                state.execute();
+                PreparedStatement stateInsert = conn.prepareStatement(sqlInsert);
+                stateInsert.setString(1, firstNameTF.getText());
+                stateInsert.setString(2, lastNameTF.getText());
+                stateInsert.setString(3, phoneTF.getText());
+                stateInsert.setString(4, addressTF.getText());
+
+                stateInsert.execute();
                 refreshCustomersTable();
                 refreshCustomersCombo();
                 clearForms();
             } catch (SQLException e1) {
-                JOptionPane.showMessageDialog(frame, "Проверете данните!");
+                JOptionPane.showMessageDialog(frame, "Проверете даните!");
             }
-        }
+        };
     }
 
-    class ProductsAddAction implements ActionListener{
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-
+    public ActionListener addProduct() {
+        return e -> {
             conn = DBConnection.getConnection();
-            String sql = "insert into products(brand, model, price, storage, color) values(?,?,?,?,?)";
+            String sqlSelect = "SELECT * FROM products WHERE brand = ? AND model = ? AND price = ? AND storage = ? AND color = ?";
+            String sqlInsert = "INSERT INTO products(brand, model, price, storage, color) VALUES (?, ?, ?, ?, ?)";
             try {
-                if(Objects.requireNonNull(brandsCombo.getSelectedItem()).toString().equals("") || productModelTF.getText().equals("") ||
-                        productColorTF.getText().equals("")){
-                    JOptionPane.showMessageDialog(frame, "Проверете данните!");
-                    return;
-                }
+                if (validateProduct(sqlSelect)) return;
 
-                state = conn.prepareStatement(sql);
-                state.setString(1, Objects.requireNonNull(brandsCombo.getSelectedItem()).toString());
-                state.setString(2, productModelTF.getText());
-                state.setFloat(3, Float.parseFloat(productPriceTF.getText()));
-                state.setInt(4, Integer.parseInt(productStorageTF.getText()));
-                state.setString(5, productColorTF.getText());
+                PreparedStatement stateInsert = conn.prepareStatement(sqlInsert);
+                stateInsert.setString(1, Objects.requireNonNull(brandsCombo.getSelectedItem()).toString());
+                stateInsert.setString(2, productModelTF.getText());
+                stateInsert.setFloat(3, Float.parseFloat(productPriceTF.getText()));
+                stateInsert.setInt(4, Integer.parseInt(productStorageTF.getText()));
+                stateInsert.setString(5, productColorTF.getText());
 
-                state.execute();
+                stateInsert.execute();
                 refreshProductsTable();
                 refreshProductsCombo();
                 clearForms();
@@ -793,27 +794,15 @@ public class MyFrame extends JFrame {
             } catch (Exception e1) {
                 JOptionPane.showMessageDialog(frame, "Проверете данните!");
             }
-        }
+        };
     }
 
-    class PurchaseAddAction implements ActionListener{
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-
+    public ActionListener addPurchase() {
+        return e -> {
             conn = DBConnection.getConnection();
             String sql ="insert into purchases(customer_name, product_name, quantity, purchase_date) values(?,?,?,?)";
             try {
-                if(Objects.requireNonNull(customerCombo.getSelectedItem()).toString().equals("") ||
-                   Objects.requireNonNull(productCombo.getSelectedItem()).toString().equals("")){
-                    JOptionPane.showMessageDialog(frame, "Проверете данните!");
-                    return;
-                }
-
-                state = conn.prepareStatement(sql);
-                state.setString(1, Objects.requireNonNull(customerCombo.getSelectedItem()).toString());
-                state.setString(2, Objects.requireNonNull(productCombo.getSelectedItem()).toString());
-                state.setInt(3, Integer.parseInt(quantityTF.getText()));
+                if (validatePurchase(sql)) return;
                 state.setString(4, purchaseDateTF.getText());
 
                 state.execute();
@@ -827,112 +816,11 @@ public class MyFrame extends JFrame {
             } catch (Exception e1) {
                 JOptionPane.showMessageDialog(frame, "Проверете данните!");
             }
-        }
+        };
     }
 
-    class CustomersEditAction implements ActionListener {
-        public void actionPerformed (ActionEvent arg0) {
-            if(id > 0) {
-                String sql = "update customers set f_name=?, l_name=?, phone=?, address=? where customer_id=?";
-
-                try {
-                    if(firstNameTF.getText().equals("") || lastNameTF.getText().equals("") ||
-                            phoneTF.getText().equals("")|| addressTF.getText().equals("")){
-                        JOptionPane.showMessageDialog(frame, "Проверете данните!");
-                        return;
-                    }
-
-                    state = conn.prepareStatement(sql);
-                    state.setString(1, firstNameTF.getText());
-                    state.setString(2, lastNameTF.getText());
-                    state.setString(3, phoneTF.getText());
-                    state.setString(4, addressTF.getText());
-                    state.setInt(5,id);
-                    state.execute();
-                    id = -1;
-                    refreshCustomersTable();
-                    refreshCustomersCombo();
-                    clearForms();
-
-                } catch (SQLException e1) {
-                    JOptionPane.showMessageDialog(frame, "Проверете данните!");
-                } catch (Exception e1) {
-                    JOptionPane.showMessageDialog(frame, "Проверете данните!");
-                }
-            }
-        }
-    }
-
-    class ProductsEditAction implements ActionListener {
-        public void actionPerformed (ActionEvent arg0) {
-            if(id > 0) {
-                String sql = "update products set brand=?, model=?, price=?, storage=?, color=? where product_id=?";
-
-                try {
-                    if(Objects.requireNonNull(brandsCombo.getSelectedItem()).toString().equals("") || productModelTF.getText().equals("") ||
-                            productColorTF.getText().equals("")){
-                        JOptionPane.showMessageDialog(frame, "Проверете данните!");
-                        return;
-                    }
-
-                    state = conn.prepareStatement(sql);
-                    state.setString(1, Objects.requireNonNull(brandsCombo.getSelectedItem()).toString());
-                    state.setString(2, productModelTF.getText());
-                    state.setFloat(3, Float.parseFloat(productPriceTF.getText()));
-                    state.setInt(4, Integer.parseInt(productStorageTF.getText()));
-                    state.setString(5, productColorTF.getText());
-                    state.setInt(6,id);
-                    state.execute();
-                    id = -1;
-                    refreshProductsTable();
-                    refreshProductsCombo();
-                    clearForms();
-
-                } catch (SQLException e1) {
-                    JOptionPane.showMessageDialog(frame, "Проверете данните!");
-                } catch (Exception e1) {
-                    JOptionPane.showMessageDialog(frame, "Проверете данните!");
-                }
-            }
-        }
-    }
-
-    class PurchaseEditAction implements ActionListener {
-        public void actionPerformed (ActionEvent arg0) {
-            if(id > 0) {
-                String sql = "update purchases set customer_name=?, product_name=?, quantity=?, purchase_date=? where purchase_id=?";
-
-                try {
-                    if(Objects.requireNonNull(customerCombo.getSelectedItem()).toString().equals("") ||
-                            Objects.requireNonNull(productCombo.getSelectedItem()).toString().equals("")){
-                        JOptionPane.showMessageDialog(frame, "Проверете данните!");
-                        return;
-                    }
-
-                    state = conn.prepareStatement(sql);
-                    state.setString(1, Objects.requireNonNull(customerCombo.getSelectedItem()).toString());
-                    state.setString(2, Objects.requireNonNull(productCombo.getSelectedItem()).toString());
-                    state.setInt(3, Integer.parseInt(quantityTF.getText()));
-                    state.setString(4, (purchaseDateTF.getText()));
-                    state.setInt(5, id);
-                    state.execute();
-                    id = -1;
-                    refreshPurchasesTable();
-                    checkCustomerPurchaseTable();
-                    checkProductPurchaseTable();
-                    clearForms();
-                } catch (SQLException e1) {
-                    JOptionPane.showMessageDialog(frame, "Проверете данните!");
-                } catch (Exception e1) {
-                    JOptionPane.showMessageDialog(frame, "Проверете данните!");
-                }
-            }
-        }
-    }
-
-    class CustomersDeleteAction implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    public ActionListener deleteCustomer() {
+        return e -> {
             conn = DBConnection.getConnection();
             String selectSql = "SELECT f_name, l_name FROM customers WHERE customer_id=?";
             String deleteSql = "DELETE FROM customers WHERE customer_id=?";
@@ -974,13 +862,11 @@ public class MyFrame extends JFrame {
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
-        }
+        };
     }
 
-    class ProductsDeleteAction implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    public ActionListener deleteProduct() {
+        return e -> {
             conn = DBConnection.getConnection();
             String selectSql = "SELECT brand, model FROM products WHERE product_id=?";
             String deleteSql="delete from products where product_id=?";
@@ -1022,13 +908,11 @@ public class MyFrame extends JFrame {
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
-        }
+        };
     }
 
-    class PurchasesDeleteAction implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    public ActionListener deletePurchase() {
+        return e -> {
             conn = DBConnection.getConnection();
             String sql = "delete from purchases where purchase_id=?";
 
@@ -1044,13 +928,192 @@ public class MyFrame extends JFrame {
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
-        }
+        };
     }
 
-    class CustomersSearchActionPhone implements ActionListener {
+    public ActionListener editCustomer() {
+        return e -> {
+            if (id > 0) {
+                String sql = "UPDATE customers SET f_name=?, l_name=?, phone=?, address=? WHERE customer_id=?";
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
+                try {
+                    if (firstNameTF.getText().equals("") || lastNameTF.getText().equals("") ||
+                            phoneTF.getText().equals("") || addressTF.getText().equals("")) {
+                        JOptionPane.showMessageDialog(frame, "Проверете данните!");
+                        return;
+                    }
+
+                    String existingCustomerSql = "SELECT f_name, l_name, phone, address FROM customers WHERE customer_id=?";
+                    PreparedStatement existingCustomerStmt = conn.prepareStatement(existingCustomerSql);
+                    existingCustomerStmt.setInt(1, id);
+                    ResultSet existingCustomerResult = existingCustomerStmt.executeQuery();
+                    if (existingCustomerResult.next()) {
+                        String existingFName = existingCustomerResult.getString("f_name");
+                        String existingLName = existingCustomerResult.getString("l_name");
+                        String existingPhone = existingCustomerResult.getString("phone");
+                        String existingAddress = existingCustomerResult.getString("address");
+                        if (existingFName.equals(firstNameTF.getText()) && existingLName.equals(lastNameTF.getText()) &&
+                                existingPhone.equals(phoneTF.getText()) && existingAddress.equals(addressTF.getText())) {
+                            JOptionPane.showMessageDialog(frame, "Не сте направили никакви промени!");
+                            return;
+                        }
+                    }
+
+                    String allCustomersSql = "SELECT phone FROM customers WHERE customer_id != ?";
+                    PreparedStatement allCustomersStmt = conn.prepareStatement(allCustomersSql);
+                    allCustomersStmt.setInt(1, id);
+                    ResultSet allCustomersResult = allCustomersStmt.executeQuery();
+                    while (allCustomersResult.next()) {
+                        String phone = allCustomersResult.getString("phone");
+                        if (phone.equals(phoneTF.getText())) {
+                            JOptionPane.showMessageDialog(frame, "Съществува потребител с този телефонен номер!");
+                            return;
+                        }
+                    }
+
+
+                    PreparedStatement state = conn.prepareStatement(sql);
+                    state.setString(1, firstNameTF.getText());
+                    state.setString(2, lastNameTF.getText());
+                    state.setString(3, phoneTF.getText());
+                    state.setString(4, addressTF.getText());
+                    state.setInt(5, id);
+                    state.execute();
+                    id = -1;
+                    refreshCustomersTable();
+                    refreshCustomersCombo();
+                    clearForms();
+
+                } catch (SQLException e1) {
+                    JOptionPane.showMessageDialog(frame, "Проверете данните!");
+                } catch (Exception e1) {
+                    JOptionPane.showMessageDialog(frame, "Проверете данните!");
+                }
+            }
+        };
+    }
+
+    public ActionListener editProduct() {
+        return e -> {
+            if(id > 0) {
+                String sql = "update products set brand=?, model=?, price=?, storage=?, color=? where product_id=?";
+                String sqlSelect = "SELECT * FROM products WHERE brand = ? AND model = ? AND price = ? AND storage = ? AND color = ?";
+
+                try {
+                    if (validateProduct(sqlSelect)) return;
+
+                    state = conn.prepareStatement(sql);
+                    state.setString(1, Objects.requireNonNull(brandsCombo.getSelectedItem()).toString());
+                    state.setString(2, productModelTF.getText());
+                    state.setFloat(3, Float.parseFloat(productPriceTF.getText()));
+                    state.setInt(4, Integer.parseInt(productStorageTF.getText()));
+                    state.setString(5, productColorTF.getText());
+                    state.setInt(6,id);
+                    state.execute();
+                    id = -1;
+                    refreshProductsTable();
+                    refreshProductsCombo();
+                    clearForms();
+
+                } catch (SQLException e1) {
+                    JOptionPane.showMessageDialog(frame, "Проверете данните!");
+                } catch (Exception e1) {
+                    JOptionPane.showMessageDialog(frame, "Проверете данните!");
+                }
+            }
+        };
+    }
+
+    public ActionListener editPurchase() {
+        return e -> {
+            if(id > 0) {
+                String sql = "update purchases set customer_name=?, product_name=?, quantity=?, purchase_date=? where purchase_id=?";
+
+                try {
+                    if (validatePurchase(sql)) return;
+                    state.setString(4, (purchaseDateTF.getText()));
+                    state.setInt(5, id);
+                    state.execute();
+                    id = -1;
+                    refreshPurchasesTable();
+                    checkCustomerPurchaseTable();
+                    checkProductPurchaseTable();
+                    clearForms();
+                } catch (SQLException e1) {
+                    JOptionPane.showMessageDialog(frame, "Проверете данните!");
+                } catch (Exception e1) {
+                    JOptionPane.showMessageDialog(frame, "Проверете данните!");
+                }
+            }
+        };
+    }
+
+    public boolean validateProduct(String sqlSelect) throws SQLException {
+        if(Objects.requireNonNull(brandsCombo.getSelectedItem()).toString().equals("") || productModelTF.getText().equals("") ||
+                productColorTF.getText().equals("")){
+            JOptionPane.showMessageDialog(frame, "Проверете данните!");
+            return true;
+        }
+
+        PreparedStatement stateSelect = conn.prepareStatement(sqlSelect);
+        stateSelect.setString(1, Objects.requireNonNull(brandsCombo.getSelectedItem()).toString());
+        stateSelect.setString(2, productModelTF.getText());
+        stateSelect.setFloat(3, Float.parseFloat(productPriceTF.getText()));
+        stateSelect.setInt(4, Integer.parseInt(productStorageTF.getText()));
+        stateSelect.setString(5, productColorTF.getText());
+
+        ResultSet rs = stateSelect.executeQuery();
+        if (rs.next()) {
+            JOptionPane.showMessageDialog(frame, "Тези данни вече съществуват!");
+            return true;
+        }
+        return false;
+    }
+
+    public boolean validatePurchase(String sql) throws SQLException {
+        if(Objects.requireNonNull(customerCombo.getSelectedItem()).toString().equals("") ||
+                Objects.requireNonNull(productCombo.getSelectedItem()).toString().equals("")){
+            JOptionPane.showMessageDialog(frame, "Проверете данните!");
+            return true;
+        }
+
+        state = conn.prepareStatement(sql);
+        state.setString(1, Objects.requireNonNull(customerCombo.getSelectedItem()).toString());
+        state.setString(2, Objects.requireNonNull(productCombo.getSelectedItem()).toString());
+        state.setInt(3, Integer.parseInt(quantityTF.getText()));
+        return false;
+    }
+
+    public ActionListener refreshCustomer() {
+        return e -> {
+            refreshCustomersTable();
+            clearForms();
+        };
+    }
+
+    public ActionListener refreshProduct() {
+        return e -> {
+            refreshProductsTable();
+            clearForms();
+        };
+    }
+
+    public ActionListener refreshPurchase() {
+        return e -> {
+            refreshPurchasesTable();
+            clearForms();
+        };
+    }
+
+    public ActionListener refreshInquiry() {
+        return e -> {
+            inquiryTable.setModel(new DefaultTableModel());
+            clearForms();
+        };
+    }
+
+    public ActionListener searchPhoneCustomer() {
+        return e -> {
             conn = DBConnection.getConnection();
             String sql = "select * from customers where phone=?";
 
@@ -1065,13 +1128,11 @@ public class MyFrame extends JFrame {
             } catch (Exception e1) {
                 JOptionPane.showMessageDialog(frame, "Проверете данните!");
             }
-        }
+        };
     }
 
-    class CustomersSearchActionAddress implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    public ActionListener searchAddressCustomer() {
+        return e -> {
             conn = DBConnection.getConnection();
             String sql = "select * from customers where lower(address)=lower(?)";
 
@@ -1091,126 +1152,71 @@ public class MyFrame extends JFrame {
             } catch (Exception e1) {
                 JOptionPane.showMessageDialog(frame, "Проверете данните!");
             }
-        }
+        };
     }
 
-    class ProductsSearchActionBrand implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    public ActionListener searchBrandProduct() {
+        return e -> {
             conn = DBConnection.getConnection();
             String sql = "select * from products where brand=?";
 
-            try {
-                state = conn.prepareStatement(sql);
-                state.setString(1, Objects.requireNonNull(brandsCombo.getSelectedItem()).toString());
-                result = state.executeQuery();
-                productsTable.setModel(new MyModel(result));
-                clearForms();
-            } catch (SQLException e1) {
-                JOptionPane.showMessageDialog(frame, "Проверете данните!");
-            } catch (Exception e1) {
-                JOptionPane.showMessageDialog(frame, "Проверете данните!");
-            }
-        }
+            searchWithCombo(sql, brandsCombo, productsTable);
+        };
     }
 
-    class ProductsSearchActionModel implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    public ActionListener searchModelProduct() {
+        return e -> {
             conn = DBConnection.getConnection();
             String sql = "select * from products where lower(model)=lower(?)";
 
-            try {
-                state = conn.prepareStatement(sql);
-                state.setString(1, productModelTF.getText());
-                result = state.executeQuery();
-                productsTable.setModel(new MyModel(result));
-                clearForms();
-            } catch (SQLException e1) {
-                JOptionPane.showMessageDialog(frame, "Проверете данните!");
-            } catch (Exception e1) {
-                JOptionPane.showMessageDialog(frame, "Проверете данните!");
-            }
-        }
+            searchWithTF(sql, productModelTF, productsTable);
+        };
     }
 
-    class PurchasesSearchActionCustomer implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    public ActionListener searchCustomerPurchase() {
+        return e -> {
             conn = DBConnection.getConnection();
-            String sql = "select pu.purchase_id, pu.customer_name, c.address, pu.product_name, " +
-                    "pu.quantity, pu.purchase_date from purchases pu join customers c on c.f_name || ' ' || c.l_name = pu.customer_name" +
-                    " join products pr on pr.brand || ' ' || pr.model = pu.product_name where pu.customer_name = ?";
+            String sql = "SELECT pu.purchase_id, pu.customer_name, c.address, pu.product_name, " +
+                    "pu.quantity, pr.price * pu.quantity as total_price, pu.purchase_date " +
+                    "FROM purchases pu " +
+                    "JOIN customers c ON c.f_name || ' ' || c.l_name = pu.customer_name " +
+                    "JOIN products pr ON pr.brand || ' ' || pr.model = pu.product_name where pu.customer_name = ?";
 
-            try {
-                state = conn.prepareStatement(sql);
-                state.setString(1, Objects.requireNonNull(customerCombo.getSelectedItem()).toString());
-                result = state.executeQuery();
-                purchaseTable.setModel(new MyModel(result));
-                clearForms();
-            } catch (SQLException e1) {
-                JOptionPane.showMessageDialog(frame, "Проверете данните!");
-            } catch (Exception e1) {
-                JOptionPane.showMessageDialog(frame, "Проверете данните!");
-            }
-        }
+            searchWithCombo(sql, customerCombo, purchaseTable);
+        };
     }
 
-    class PurchasesSearchActionProduct implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    public ActionListener searchProductPurchase() {
+        return e -> {
             conn = DBConnection.getConnection();
-            String sql = "select pu.purchase_id, pu.customer_name, c.address, pu.product_name, " +
-                    "pu.quantity, pu.purchase_date from purchases pu join customers c on c.f_name || ' ' || c.l_name = pu.customer_name" +
-                    " join products pr on pr.brand || ' ' || pr.model = pu.product_name where pu.product_name = ?";
+            String sql = "SELECT pu.purchase_id, pu.customer_name, c.address, pu.product_name, " +
+                    "pu.quantity, pr.price * pu.quantity as total_price, pu.purchase_date " +
+                    "FROM purchases pu " +
+                    "JOIN customers c ON c.f_name || ' ' || c.l_name = pu.customer_name " +
+                    "JOIN products pr ON pr.brand || ' ' || pr.model = pu.product_name where pu.product_name = ?";
 
-            try {
-                state = conn.prepareStatement(sql);
-                state.setString(1, Objects.requireNonNull(productCombo.getSelectedItem()).toString());
-                result = state.executeQuery();
-                purchaseTable.setModel(new MyModel(result));
-                clearForms();
-            } catch (SQLException e1) {
-                JOptionPane.showMessageDialog(frame, "Проверете данните!");
-            } catch (Exception e1) {
-                JOptionPane.showMessageDialog(frame, "Проверете данните!");
-            }
-        }
+            searchWithCombo(sql, productCombo, purchaseTable);
+        };
     }
 
-    class PurchasesSearchActionDate implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    public ActionListener searchDatePurchase() {
+        return e -> {
             conn = DBConnection.getConnection();
-            String sql = "select pu.purchase_id, pu.customer_name, c.address, pu.product_name, " +
-                    "pu.quantity, pu.purchase_date from purchases pu join customers c on c.f_name || ' ' || c.l_name = pu.customer_name" +
-                    " join products pr on pr.brand || ' ' || pr.model = pu.product_name where pu.purchase_date = ?";
+            String sql = "SELECT pu.purchase_id, pu.customer_name, c.address, pu.product_name, " +
+                    "pu.quantity, pr.price * pu.quantity as total_price, pu.purchase_date " +
+                    "FROM purchases pu " +
+                    "JOIN customers c ON c.f_name || ' ' || c.l_name = pu.customer_name " +
+                    "JOIN products pr ON pr.brand || ' ' || pr.model = pu.product_name where pu.purchase_date = ?";
 
-            try {
-                state = conn.prepareStatement(sql);
-                state.setString(1, purchaseDateTF.getText());
-                result = state.executeQuery();
-                purchaseTable.setModel(new MyModel(result));
-                clearForms();
-            } catch (SQLException e1) {
-                JOptionPane.showMessageDialog(frame, "Проверете данните!");
-            } catch (Exception e1) {
-                JOptionPane.showMessageDialog(frame, "Проверете данните!");
-            }
-        }
+            searchWithTF(sql, purchaseDateTF, purchaseTable);
+        };
     }
 
-    class InquirySearchAction implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
+    public ActionListener searchInquiry() {
+        return e -> {
             conn = DBConnection.getConnection();
-            String sql = "select pu.purchase_id, pu.customer_name, c.address, pr.brand, pr.model, pr.color, pu.quantity " +
+            String sql = "select pu.purchase_id, pu.customer_name, c.address, pr.brand, pr.model, pr.price * pu.quantity as total_price, " +
+                    "pr.color, pu.quantity " +
                     "from purchases pu join customers c on c.f_name || ' ' || c.l_name = pu.customer_name " +
                     "join products pr on pr.brand || ' ' || pr.model = pu.product_name " +
                     "where lower(c.address)=lower(?) and lower(pr.model)=lower(?)";
@@ -1229,42 +1235,34 @@ public class MyFrame extends JFrame {
             } catch (Exception e1) {
                 JOptionPane.showMessageDialog(frame, "Проверете данните!");
             }
+        };
+    }
+
+    public void searchWithTF(String sql, JTextField productModelTF, JTable productsTable) {
+        try {
+            state = conn.prepareStatement(sql);
+            state.setString(1, productModelTF.getText());
+            result = state.executeQuery();
+            productsTable.setModel(new MyModel(result));
+            clearForms();
+        } catch (SQLException e1) {
+            JOptionPane.showMessageDialog(frame, "Проверете данните!");
+        } catch (Exception e1) {
+            JOptionPane.showMessageDialog(frame, "Проверете данните!");
         }
     }
 
-    class CustomersRefreshAction implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            refreshCustomersTable();
+    public void searchWithCombo(String sql, JComboBox<String> combo, JTable table) {
+        try {
+            state = conn.prepareStatement(sql);
+            state.setString(1, Objects.requireNonNull(combo.getSelectedItem()).toString());
+            result = state.executeQuery();
+            table.setModel(new MyModel(result));
             clearForms();
-        }
-    }
-
-    class ProductsRefreshAction implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            refreshProductsTable();
-            clearForms();
-        }
-    }
-
-    class PurchasesRefreshAction implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            refreshPurchasesTable();
-            clearForms();
-        }
-    }
-
-    class InquiryRefreshAction implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            inquiryTable.setModel(new DefaultTableModel());
-            clearForms();
+        } catch (SQLException e1) {
+            JOptionPane.showMessageDialog(frame, "Проверете данните!");
+        } catch (Exception e1) {
+            JOptionPane.showMessageDialog(frame, "Проверете данните!");
         }
     }
 
